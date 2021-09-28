@@ -1,24 +1,26 @@
-import logo from './logo.svg';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useEffect, useState } from 'react';
+
+import { Row, Spinner } from 'react-bootstrap';
 import './App.css';
+import Cart from './components/Cart/Cart';
 
 function App() {
+  const [news, setNews] = useState([]);
+  useEffect(() => {
+    fetch('https://newsapi.org/v2/everything?q=Apple&from=2021-09-28&sortBy=popularity&apiKey=95be2f0da77f4338af50986aab2d62d8').then(res => res.json()).then(data => setNews(data.articles));
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Row xs={1} md={4} className="g-4">
+      {
+        news.length === 0 ? <Spinner className = "center" animation="border" />:
+        
+          news.map(nw => <Cart news = {nw}></Cart>)
+        
+      }
+     
+    </Row>
   );
 }
 
